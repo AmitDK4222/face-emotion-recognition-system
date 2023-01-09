@@ -1,0 +1,108 @@
+PPt 7:
+
+Now I will explain some of the important terminologies for image processing...
+
+Padding :
+In the first image...
+In order to assist the filter with processing the image, zero padding is added to the frame of the image to allow for more space for the filter to cover the image. Adding padding to an image processed by a CNN allows for more accurate analysis of images.
+
+In the second image...
+The red box represent filter...
+The first layer of the network is made of small chunk of neurons that scan across the image that is processing a few pixels at a time. Typically these are squares of 9 or 16 or 25 pixels. The small filter slides along the image, working on small blocks at a time.
+
+
+PPT 8:
+
+In the First image on this slide a small representation of how stride function is used with max pooling has given.
+Suppose our filter is of size 2 by 2 then for consideration of each outer pixel we used the zero padding. In the diagram filter moves forward in row to next column by one pixel at a time. After reaching end column it moves to the next row by one pixel till it reaches the end row & column. And while moving it does max pooling for each iteration.
+
+In the Second image..
+Max pooling is a pooling operation that selects the maximum element from the region of the feature map covered by the filter. Thus, the output after max-pooling layer would be a feature map containing the most prominent features of the previous feature map.
+In our case we used to count the number of zeros and ones and whichever is the bigger count
+we passed zero or one accordingly.
+
+PPT 9:
+
+These are the two neuron activation functions that we mostly used...
+
+Input Activation Function that we used is Exponential Linear Unit or its widely known name ELU is a function that tend to converge cost to zero faster and produce more accurate results. 
+
+     ELU is very similiar to RELU except negative inputs. They are both in identical functions for non-negative inputs. On the other hand, ELU becomes smooth slowly until its output equal to -α whereas RELU sharply smoothes.
+
+
+The Output Activation Function that we used in last layer of CNN is The softmax function is sometimes called  multi-class logistic regression. This is because the softmax is a generalization of logistic regression that can be used for multi-class classification.
+
+     The softmax function is a function that turns a vector of K real values into a vector of K real values that sum to 1. 
+
+     The input values can be positive, negative, zero, or greater than one, but the softmax transforms them into values between 0 and 1, so that they can be interpreted as probabilities. If one of the inputs is small or negative, the softmax turns it into a small probability, and if an input is large, then it turns it into a large probability, but it will always remain between 0 and 1.
+
+
+PPT 10:
+
+System architecture:
+Project Modules are...
+1. Image Data Collection and Dataset Creation
+2. CNN Architecture Creation and Training Model
+3. Validation of Model Using Driver Code
+4. GUI Creation
+
+In the first module we have used web sraping for collecting data from internet. Also our added advantage was fer2013 dataset. Which we have used in training dataset.
+Our model is trained on Gray images.
+We have split the data into training and validation and we have used fer2013 datset images for training the model. And we have used the preprocessed web scraped images for validation.
+
+In the architecture that we used...
+There are total 7 blocks ...
+With each block having 1-2 CNN layers..
+
+All the hidden layers use ELU as its input activation function and use Dropout Function with 20 % as Output Activation Function So the weights do to overfit.
+
+The input to the network is image of dimensions (48, 48, 1). The first layer has 32 channels of 3*3 filter size and same padding. Then after a max pool layer of stride (2, 2), two layers which have convolution layers of filter size (3, 3). This is followed by Batch Normalization. This followed by a max pooling layer of stride (2, 2) which is same as previous layer. This Connected to dropout function which is used to prevent the model from overfitting.
+This is first block.
+
+We have used the same block architecture for next 3 blocks that is 2nd 3rd 4th block with the difference that the with each succeding block number of neurons increase doubles and the output size of image reduced by double.
+
+After these 4 blocks ... 
+
+The 5th block takes the input as flattened this output from previous block to make it a feature vector. After this there is fully connected dense layers containing 64 neurons, Then batch normalization.
+
+Next 6th Block is as same as 5th block.
+
+In 7th block of neural networkthe output of 6th block is fully connected layer is passed to softmax layer in order to normalize the classification vector. For the output of classification vector into the 7 categories of emotions for evaluation. 
+
+So this is the whole structure of the CNN that we are using...
+We have used Python language to implement the architecture with libraries,
+NumPy, Pandas, Tensorflow, Keras, OpenCV.
+
+
+Batch Normalization :
+
+Batch normalization is a method we can use to normalize the inputs of each layer. During training time, a batch normalization layer does the following: Calculate the mean and variance of the layers input.
+
+Softmax :
+
+The softmax function is sometimes called  multi-class logistic regression. This is because the softmax is a generalization of logistic regression that can be used for multi-class classification, and its formula is very similar to the sigmoid function which is used for logistic regression.
+
+The softmax function is a function that turns a vector of K real values into a vector of K real values that sum to 1. The input values can be positive, negative, zero, or greater than one, but the softmax transforms them into values between 0 and 1, so that they can be interpreted as probabilities. If one of the inputs is small or negative, the softmax turns it into a small probability, and if an input is large, then it turns it into a large probability, but it will always remain between 0 and 1.
+
+Max Pooling :
+
+Max pooling is a pooling operation that selects the maximum element from the region of the feature map covered by the filter. Thus, the output after max-pooling layer would be a feature map containing the most prominent features of the previous feature map
+
+Dropout Layer : 
+
+A Simple Way to Prevent Neural Networks from Overfitting is Dropout Layer at the end of block. Because the outputs of a layer under dropout are randomly subsampled, it has the effect of reducing the capacity or thinning the network during training. The Dropout layer randomly sets input units to 0 with a frequency of rate at each step during training time, which helps prevent overfitting.
+
+Dense Layer : 
+
+The dense layer is a fully connected layer, meaning all the neurons in a layer are connected to those in the next layer
+
+
+Flatten :
+
+Flattening is converting the data into a 1-dimensional array for inputting it to the next layer. We flatten the output of the convolutional layers to create a single long feature vector. And it is connected to the final classification model, which is called a fully-connected layer.
+
+But there are few major drawbacks with VGGNet:
+
+1.It is very slow to train.
+2.It requires the vary large amount of data for training from each class equally.
+2.Due to the depth of convolutional layers and number of fully-connected nodes, VGG16 is in 100MB+.
